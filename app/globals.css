@@ -121,7 +121,7 @@
   }
 }
 
-@layer utilities{
+/* @layer utilities{
   .gradient{
     @apply bg-gradient-to-br from-blue-600 to-purple-600
   }
@@ -130,7 +130,7 @@
   }
 }
 
-/* //for hero image raper */
+*/
 
 .hero-image-wrapper{
   perspective: 1000px;
@@ -141,4 +141,4 @@
 }
 .hero-image-scrolled{
   transform: rotateX(0deg) scale(1) translateY(40px);
-}
+}  
