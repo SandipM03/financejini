@@ -2,20 +2,55 @@
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/prisma"
 import { revalidatePath } from "next/cache";
-import { th } from "date-fns/locale";
+
+
 
 //as nextjs doesnot support float, we need to convert balance to float number
 const searializeTransaction=(obj)=>{
     const searialized={...obj};
     if(obj.balance){
-        searialized.balance=obj.balance.toString();
+        searialized.balance=obj.balance.toNumber();
     }
+    if(obj.amount){
+        searialized.amount=obj.amount.toNumber();
+    }
+    return searialized;
+}
+
+export async function getUserAccount(){
+    const {userId}= await auth();
+    if(!userId) throw new Error("User not found")
+        const user= await db.user.findUnique({
+            where:{clerkUserId:userId},
+        });
+        if(!user){
+            throw new Error("User not found")
+        }
+        
+        try {
+            const accounts = await db.account.findMany({
+                where: {userId: user.id},
+                orderBy: {createdAt: 'desc'},
+                include: {
+                    _count: {
+                        select: {
+                            transactions: true
+                        }
+                    }
+                }
+            });
+            const searializedAccounts = accounts.map(searializeTransaction);
+            return searializedAccounts;
+        } catch (error) {
+            console.error(error.message);
+        }
 }
 //create backAccount action
 export async function createAccount(data) {
     try {
         const {userId}= await auth()
         if(!userId) throw new Error("User not found")
+        
         const user= await db.user.findUnique({
             where:{clerkUserId:userId},
         });
@@ -38,7 +73,7 @@ export async function createAccount(data) {
                 data: {isDefault: false},
             });
         }
-        const account= await db.account.create({
+        const accounts= await db.account.create({
             data:{
                 ...data,
                 balance:balanceFloat,
@@ -48,9 +83,45 @@ export async function createAccount(data) {
             },
         });
 
-        const searializedAccount=searializeTransaction(account);
+        const searializedAccount=accounts.map(searializeTransaction);
         revalidatePath('/dashboard');
         return {success:true, account:searializedAccount};
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+
+
+export async function updateDefaultAccount(accountId) {
+    try {
+        const {userId} = await auth();
+        if(!userId) throw new Error("User not found");
+        
+        const user = await db.user.findUnique({
+            where: {clerkUserId: userId},
+        });
+        if(!user) {
+            throw new Error("User not found");
+        }
+
+        // First, set all accounts to not default
+        await db.account.updateMany({
+            where: {userId: user.id, isDefault: true},
+            data: {isDefault: false},
+        });
+
+        // Then set the specified account as default
+        const updatedAccount = await db.account.update({
+            where: {
+                id: accountId,
+                userId: user.id,
+            },
+            data: {isDefault: true},
+        });
+
+        revalidatePath('/dashboard');
+        return {success: true, account: searializeTransaction(updatedAccount)};
     } catch (error) {
         throw new Error(error.message);
     }
