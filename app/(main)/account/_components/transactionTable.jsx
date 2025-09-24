@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -38,17 +38,10 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { set } from 'zod';
 import { Chevron } from 'react-day-picker';
-import { tr } from 'date-fns/locale';
+import { de, tr } from 'date-fns/locale';
 import { Input } from '@/components/ui/input';
 const TransactionTable = ({ transactions }) => {
-  const filteredAndSortedTransactions = transactions;
-  
-  const recurring_interval = {
-    DAILY: "Daily",
-    WEEKLY: "Weekly",
-    MONTHLY: "Monthly",
-    YEARLY: "Yearly",
-  }
+
   const router= useRouter();
   const [selectedId, setSelectedId] = React.useState([]);
   const [sortConfig, setSortConfig] = React.useState({ field:"date", direction:"desc" });
@@ -56,6 +49,61 @@ const TransactionTable = ({ transactions }) => {
   const [typeFilter, setTypeFilter] = useState("");
   const [recurringFilter, setRecurringFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+const filteredAndSortedTransactions = useMemo(()=>{
+  let result=[...transactions];
+  //apply search filter
+  if(searchTerm){
+    const searchLower= searchTerm.toLowerCase();
+    result=result.filter((transaction)=>
+    transaction.description?.toLowerCase().includes(searchLower)
+    );
+  }
+  //apply recurring filter
+  if(recurringFilter){
+    result=result.filter((transaction)=>{
+     if(recurringFilter==="recurring") return transaction.isRecurring;
+    return !transaction.isRecurring;
+  });
+  }
+  //apply type filter
+  if(typeFilter){
+    result=result.filter((transaction)=>transaction.type===typeFilter);
+  }
+  //apply sorting filter
+  result.sort((a,b)=>{
+    let comprasion=0;
+    switch(sortConfig.field){
+      case "date":
+        comprasion=new Date(a.date)-new Date(b.date);
+        break;
+      case "amount":
+        comprasion=a.amount-b.amount;
+        break;
+      case "category":
+        comprasion=a.category.localeCompare(b.category);
+        break;
+      default:
+        comprasion=0;
+    }
+    return sortConfig.direction==="asc"? comprasion:-comprasion;
+  })
+
+  return result;
+
+},[
+  transactions,
+  searchTerm,
+  typeFilter,
+  recurringFilter,
+  sortConfig,
+]);
+  
+const recurring_interval = {
+    DAILY: "Daily",
+    WEEKLY: "Weekly",
+    MONTHLY: "Monthly",
+    YEARLY: "Yearly",
+  }
   const handleSort=(field)=>{
     setSortConfig(current=>({
       field,
