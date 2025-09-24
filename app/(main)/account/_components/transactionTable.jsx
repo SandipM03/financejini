@@ -1,5 +1,5 @@
 "use client";
-import React, { use } from 'react'
+import React, { useState } from 'react'
 import {
   Table,
   TableBody,
@@ -18,7 +18,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { format } from 'date-fns';
 import {categoryColors} from '@/data/categories';
 import { Badge } from '@/components/ui/badge';
-import { ChevronDown, ChevronUp, Clock, MoreHorizontal, RefreshCw } from 'lucide-react';
+import { ChevronDown, ChevronUp, Clock, MoreHorizontal, RefreshCw, SearchIcon, Trash, X } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,11 +27,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { set } from 'zod';
 import { Chevron } from 'react-day-picker';
 import { tr } from 'date-fns/locale';
+import { Input } from '@/components/ui/input';
 const TransactionTable = ({ transactions }) => {
   const filteredAndSortedTransactions = transactions;
   
@@ -44,7 +52,10 @@ const TransactionTable = ({ transactions }) => {
   const router= useRouter();
   const [selectedId, setSelectedId] = React.useState([]);
   const [sortConfig, setSortConfig] = React.useState({ field:"date", direction:"desc" });
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+  const [recurringFilter, setRecurringFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const handleSort=(field)=>{
     setSortConfig(current=>({
       field,
@@ -60,11 +71,70 @@ const TransactionTable = ({ transactions }) => {
       setSelectedId(current=>current.length===filteredAndSortedTransactions.length?[]:filteredAndSortedTransactions.map(t=>t.id))
   }
   //console.log(handleSelectAll);
-  
+  const handleBulkDelete=()=>{
+
+  }
+  const handleClearFilters=()=>{
+    setSearchTerm("");
+    setTypeFilter("");
+    setRecurringFilter("");
+    setSelectedId([]);
+  }
   return (
+    <div className='space-y-4 '>
+      {/* filter */}
+      <div className='flex flex-col sm:flex-row gap-4'>
+        <div className='relative flex-1'>
+          <SearchIcon className='absolute left-2 top-2.5 w-4 text-muted-foreground'/>
+          <Input
+          placeholder='Search by description, category'
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+           className='pl-8'/>
+        </div>
+          <div className='flex gap-2 '>
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Types" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="INCOME">Income</SelectItem>
+                    <SelectItem value="EXPENSE">Expense</SelectItem>
 
+                  </SelectContent>
+            </Select>
 
-    <div className='space-y-4'>
+            <Select value={recurringFilter} onValueChange={(value)=>setRecurringFilter(value)}>
+                  <SelectTrigger className='w-[140px]'>
+                    <SelectValue placeholder="All Transactions" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="recurring">Recurring Only</SelectItem>
+                    <SelectItem value="non-recurring">Non-Recurring Only</SelectItem>
+                  
+                  </SelectContent>
+            </Select>
+            {selectedId.length>0 &&(<div className='flex items-center gap-2'>
+              <Button variant='destructive' size="sm" onClick={handleBulkDelete}>
+                <Trash className='h-4 w-4 mr-2'/>
+                Delete Selected : ({selectedId.length})
+              </Button>
+            </div>
+              )}
+
+              {(searchTerm || typeFilter || recurringFilter) &&(
+                <Button 
+                  variant='outline' 
+                  size='icon'
+                  onClick={handleClearFilters} 
+                  title="clear Filters"
+                >
+                  <X className='h-4 w-5'/>
+                </Button>
+              )}
+          </div>
+
+      </div>
       
     <div className=' rounded-md border'>
 
