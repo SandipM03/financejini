@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import {getAccountWithTransactions} from '@/action/accounts'
 import { notFound } from 'next/navigation';
+import TransactionTable from '../_components/transactionTable'
+import { RingLoader } from 'react-spinners';
 const AccountsPage = async ({ params }) => {
   const accountData = await getAccountWithTransactions(params.id);
   if(!accountData){
@@ -9,7 +11,8 @@ const AccountsPage = async ({ params }) => {
   const {transactions,...account}=accountData;
 
   return (
-    <div className='space-y-8 px-5 flex gap-4 items-end justify-between'>
+    <div className='space-y-8 px-5 '>
+      <div className='flex gap-4 items-end justify-between'>
       <div>
         <h1 className='text-5xl sm:text-6xl font-bold  capitalize'>{account.name}</h1>
         <p className='text-muted-foreground'>{account.type.charAt(0).toUpperCase() + account.type.slice(1).toUpperCase()}</p>
@@ -18,10 +21,13 @@ const AccountsPage = async ({ params }) => {
         <div className='text-xl sm:text-2xl font-bold'>${parseFloat(account.balance).toFixed(2)}</div>
         <p className='text-sm text-muted-foreground'>{account._count.transactions} Transaction</p>
       </div>
-      
+      </div>
       {/* chart Section */}
-
+      
       {/* transaction table */}
+      <Suspense fallback={<RingLoader className='mt-4 ' width={40} height={"100%"} color='#9333ea' />}>
+        <TransactionTable transactions={transactions}/>
+      </Suspense>
     </div>
   )
 }
