@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -40,15 +40,37 @@ import { set } from 'zod';
 import { Chevron } from 'react-day-picker';
 import { de, tr } from 'date-fns/locale';
 import { Input } from '@/components/ui/input';
+import useFetch from '@/hooks/use-fetch';
+import { bulckDeleteTransaction } from '@/action/accounts';
+import { toast } from 'sonner';
+import { BarLoader} from 'react-spinners';
 const TransactionTable = ({ transactions }) => {
 
   const router= useRouter();
-  const [selectedId, setSelectedId] = React.useState([]);
+  const [selectedIds, setSelectedIds] = React.useState([]);
   const [sortConfig, setSortConfig] = React.useState({ field:"date", direction:"desc" });
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [recurringFilter, setRecurringFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+const {
+  loading:deleteLoading,
+  fn:deleteFn,
+  data:deleted,
+}=useFetch(bulckDeleteTransaction)
+
+const handleBulkDelete=async()=>{
+  if(window.confirm(
+    `Are you sure you want to delete ${selectedIds.length} transactions?`)
+  ){return;}
+
+  deleteFn(selectedIds);
+}
+useEffect(()=>{
+  if(deleted && deleteLoading){
+    toast.error("Transactions deleted successfully");
+  }
+},[deleted,deleteLoading])
 const filteredAndSortedTransactions = useMemo(()=>{
   let result=[...transactions];
   //apply search filter
@@ -111,25 +133,25 @@ const recurring_interval = {
     }))
   };
   const handleSelect=(id)=>{
-    setSelectedId(current=>current.includes(id)?current.filter(item=>item!==id):[...current,id])
+    setSelectedIds(current=>current.includes(id)?current.filter(item=>item!==id):[...current,id])
   }
-  //console.log(selectedId);
+  //console.log(selectedIds);
   
   const handleSelectAll=()=>{
-      setSelectedId(current=>current.length===filteredAndSortedTransactions.length?[]:filteredAndSortedTransactions.map(t=>t.id))
+      setSelectedIds(current=>current.length===filteredAndSortedTransactions.length?[]:filteredAndSortedTransactions.map(t=>t.id))
   }
   //console.log(handleSelectAll);
-  const handleBulkDelete=()=>{
-
-  }
   const handleClearFilters=()=>{
     setSearchTerm("");
     setTypeFilter("");
     setRecurringFilter("");
-    setSelectedId([]);
+    setSelectedIds([]);
   }
+
+
   return (
     <div className='space-y-4 '>
+      {deleteLoading && (<BarLoader className='mt-4' width={'100%'} color='#933ea'/>)}
       {/* filter */}
       <div className='flex flex-col sm:flex-row gap-4'>
         <div className='relative flex-1'>
@@ -162,10 +184,10 @@ const recurring_interval = {
                   
                   </SelectContent>
             </Select>
-            {selectedId.length>0 &&(<div className='flex items-center gap-2'>
+            {selectedIds.length>0 &&(<div className='flex items-center gap-2'>
               <Button variant='destructive' size="sm" onClick={handleBulkDelete}>
                 <Trash className='h-4 w-4 mr-2'/>
-                Delete Selected : ({selectedId.length})
+                Delete Selected : ({selectedIds.length})
               </Button>
             </div>
               )}
@@ -192,7 +214,7 @@ const recurring_interval = {
     <TableRow>
       <TableHead className="w-[50px]">
         <Checkbox onCheckedChange={handleSelectAll}
-        checked={selectedId.length===filteredAndSortedTransactions.length && filteredAndSortedTransactions.length>0}
+        checked={selectedIds.length===filteredAndSortedTransactions.length && filteredAndSortedTransactions.length>0}
         />
       </TableHead>
       <TableHead 
@@ -252,7 +274,7 @@ const recurring_interval = {
         <TableRow key={transaction.id} className="hover:bg-muted">
         <TableCell >
           <Checkbox onCheckedChange={() => handleSelect(transaction.id)}
-           checked={selectedId.includes(transaction.id)}
+           checked={selectedIds.includes(transaction.id)}
           />
         </TableCell>
         <TableCell>{format(new Date(transaction.date),"pp")}</TableCell>
@@ -304,13 +326,13 @@ const recurring_interval = {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel
+              <DropdownMenuItem
               onClick={()=>
                 router.push(
                   `/transaction/create?edit=${transaction.id}`
                 )
               }
-              >Edit</DropdownMenuLabel>
+              >Edit</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className='text-destructive'
                onClick={()=>deleteFn([transaction.id])}
