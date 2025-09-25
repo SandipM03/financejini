@@ -3,6 +3,7 @@ import {getAccountWithTransactions} from '@/action/accounts'
 import { notFound } from 'next/navigation';
 import TransactionTable from '../_components/transactionTable'
 import { RingLoader } from 'react-spinners';
+import AccountChart from '../_components/accountchart';
 const AccountsPage = async ({ params }) => {
   const { id } = await params;
   const accountData = await getAccountWithTransactions(id);
@@ -24,6 +25,12 @@ const AccountsPage = async ({ params }) => {
       </div>
       </div>
       {/* chart Section */}
+      <Suspense
+      fallback={<RingLoader className='mt-4 ' width={40} height={"100%"} color='#9333ea' />}
+      >
+        <AccountChart transactions={transactions}/>
+
+      </Suspense>
       
       {/* transaction table */}
       <Suspense fallback={<RingLoader className='mt-4 ' width={40} height={"100%"} color='#9333ea' />}>
