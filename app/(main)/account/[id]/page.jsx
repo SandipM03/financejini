@@ -4,7 +4,8 @@ import { notFound } from 'next/navigation';
 import TransactionTable from '../_components/transactionTable'
 import { RingLoader } from 'react-spinners';
 const AccountsPage = async ({ params }) => {
-  const accountData = await getAccountWithTransactions(params.id);
+  const { id } = await params;
+  const accountData = await getAccountWithTransactions(id);
   if(!accountData){
     notFound();
   }

@@ -13,6 +13,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  TooltipProvider,
 } from "@/components/ui/tooltip"
 import { Checkbox } from '@/components/ui/checkbox'
 import { format } from 'date-fns';
@@ -23,7 +24,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -36,19 +36,16 @@ import {
 } from "@/components/ui/select"
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { set } from 'zod';
-import { Chevron } from 'react-day-picker';
-import { de, tr } from 'date-fns/locale';
 import { Input } from '@/components/ui/input';
 import useFetch from '@/hooks/use-fetch';
-import { bulckDeleteTransaction } from '@/action/accounts';
+import { bulkDeleteTransaction } from '@/action/accounts';
 import { toast } from 'sonner';
 import { BarLoader} from 'react-spinners';
 const TransactionTable = ({ transactions }) => {
 
   const router= useRouter();
-  const [selectedIds, setSelectedIds] = React.useState([]);
-  const [sortConfig, setSortConfig] = React.useState({ field:"date", direction:"desc" });
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ field:"date", direction:"desc" });
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [recurringFilter, setRecurringFilter] = useState("");
@@ -57,20 +54,28 @@ const {
   loading:deleteLoading,
   fn:deleteFn,
   data:deleted,
-}=useFetch(bulckDeleteTransaction)
+}=useFetch(bulkDeleteTransaction)
 
 const handleBulkDelete=async()=>{
-  if(window.confirm(
+  if(!window.confirm(
     `Are you sure you want to delete ${selectedIds.length} transactions?`)
   ){return;}
 
-  deleteFn(selectedIds);
+  await deleteFn(selectedIds);
 }
+
 useEffect(()=>{
-  if(deleted && deleteLoading){
-    toast.error("Transactions deleted successfully");
+  if(deleted?.success){
+    toast.success(deleted.message || "Transactions deleted successfully");
+    setSelectedIds([]); // Clear selection after successful delete
   }
-},[deleted,deleteLoading])
+},[deleted])
+
+useEffect(()=>{
+  if(deleted?.error){
+    toast.error(deleted.error || "Failed to delete transactions");
+  }
+},[deleted])
 const filteredAndSortedTransactions = useMemo(()=>{
   let result=[...transactions];
   //apply search filter
@@ -150,8 +155,9 @@ const recurring_interval = {
 
 
   return (
-    <div className='space-y-4 '>
-      {deleteLoading && (<BarLoader className='mt-4' width={'100%'} color='#933ea'/>)}
+    <TooltipProvider>
+      <div className='space-y-4 '>
+        {deleteLoading && (<BarLoader className='mt-4' width={'100%'} color='#933ea'/>)}
       {/* filter */}
       <div className='flex flex-col sm:flex-row gap-4'>
         <div className='relative flex-1'>
@@ -159,7 +165,7 @@ const recurring_interval = {
           <Input
           placeholder='Search by description, category'
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {setSearchTerm(e.target.value); setCurrentPage(1);}}
            className='pl-8'/>
         </div>
           <div className='flex gap-2 '>
@@ -174,7 +180,7 @@ const recurring_interval = {
                   </SelectContent>
             </Select>
 
-            <Select value={recurringFilter} onValueChange={(value)=>setRecurringFilter(value)}>
+            <Select value={recurringFilter} onValueChange={(value)=>{setRecurringFilter(value); setCurrentPage(1);}}>
                   <SelectTrigger className='w-[140px]'>
                     <SelectValue placeholder="All Transactions" />
                   </SelectTrigger>
@@ -347,10 +353,11 @@ const recurring_interval = {
       ))
     
     )}
-  </TableBody>
-</Table>
-</div>
-</div>
+        </TableBody>
+      </Table>
+      </div>
+    </div>
+    </TooltipProvider>
   )
 }
 
