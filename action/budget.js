@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache"
 
 
 
-export async function getCurrentBudget(data){
+export async function getCurrentBudget(accountId){
     try {
         const {userId}= await auth()
             if(!userId) throw new Error("User not found")
@@ -22,7 +22,7 @@ export async function getCurrentBudget(data){
 
         })
         const currentDate=new Date();
-        const startOfMonth=new DragEvent(
+        const startOfMonth=new Date(
             currentDate.getFullYear(),
             currentDate.getMonth(),
             1
@@ -42,11 +42,11 @@ export async function getCurrentBudget(data){
                 },
                 accountId,
             },
-            _sum:{amount:true}
+            _sum:{amount:true,},
         })
         return{
             budget: budget?{...budget,amount:budget.amount.toNumber()}:null,
-            expenses:expenses._sum.amount
+            currentExpenses:expenses._sum.amount
               ?expenses._sum.amount.toNumber()
               :0,
         }
