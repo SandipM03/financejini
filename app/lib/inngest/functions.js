@@ -1,7 +1,7 @@
 import { db } from "@/lib/prisma";
 import { inngest } from "./client";
-import { da } from "date-fns/locale";
-import { gte } from "zod";
+import EmailTemplate from "@/emails/template";
+import { sendEmail } from "@/action/sendEmail";
 
 
 export const checkBudgetAlert = inngest.createFunction(
@@ -54,13 +54,30 @@ export const checkBudgetAlert = inngest.createFunction(
                     },
                 });
                 const totalExpenses = expenses._sum.amount?.toNumber() || 0;
-                const budgetAmount = budget.amount;
-                const percentageUsed= (totalExpenses / budgetAmount) * 100;
+                const budgetAmount = budget.amount.toNumber ? budget.amount.toNumber() : budget.amount;
+                const percentageUsed = budgetAmount > 0 ? (totalExpenses / budgetAmount) * 100 : 0;
 
-                if(percentageUsed >= 80 && (budget.lastAlertSent || 
+                console.log(`Budget check for user ${budget.user.email}: ${percentageUsed.toFixed(1)}% used`);
+                
+                if(percentageUsed >= 80 && (!budget.lastAlertSent || 
                     isNewMonth(new Date(budget.lastAlertSent), new Date()))
                 ){
+                    console.log(`Sending budget alert to ${budget.user.email}`);
                     // send email
+                    await sendEmail({
+                        to: budget.user.email,
+                        subject: `Budget Alert - ${defaultAccount.name}`,
+                        react: EmailTemplate({
+                            userName: budget.user.name,
+                            type: "budget-alert",
+                            data:{
+                                percentageUsed,
+                                budgetAmount: budgetAmount.toNumber ? budgetAmount.toNumber() : budgetAmount,
+                                totalExpenses: totalExpenses,
+                                accountName: defaultAccount.name,
+                            },
+                        }),
+                    });
                     
                     // update last alert sent
                     await db.budget.update({
