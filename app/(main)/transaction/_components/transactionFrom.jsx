@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { transactionSchema } from '@/app/lib/schema'
 import useFetch from '@/hooks/use-fetch'
 import { Calendar } from "@/components/ui/calendar"
+
 import {
   Select,
   SelectContent,
@@ -49,7 +50,7 @@ const AddTransactionForm = ({accounts, categories}) => {
   const type = watch('type');
   const isRecurring= watch('isRecurring');
   const date= watch('date');
-  const onSubmit = async(data) => {
+  const onSubmit = (data) => {
     const formData = {
       ...data,
       amount: parseFloat(data.amount),
@@ -58,9 +59,13 @@ const AddTransactionForm = ({accounts, categories}) => {
   }
   useEffect(()=>{
     if(transactionResult && !transactionLoading){
-      toast.success('Transaction created successfully');
-      reset();
-      router.push(`/account/${transactionResult.data.accountId}`);
+      if(transactionResult.success){
+        toast.success('Transaction created successfully');
+        reset();
+        router.push(`/account/${transactionResult.data.accountId}`);
+      } else {
+        toast.error(transactionResult.error || 'Failed to create transaction');
+      }
     }
   },[transactionResult, transactionLoading])
 
@@ -78,7 +83,6 @@ const AddTransactionForm = ({accounts, categories}) => {
           <SelectContent>
             <SelectItem value="EXPENSE">Expense</SelectItem>
             <SelectItem value="INCOME">Income</SelectItem>
-
           </SelectContent>
         </Select>
         {errors.type &&
