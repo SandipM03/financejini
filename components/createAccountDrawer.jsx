@@ -126,7 +126,7 @@ const CreateAccountDrawer = ({children}) => {
 
 
                     <div className='flex items-center justify-between rounded-lg border p-2 mt-4'>
-                        <div>
+                        <div className='space-y-0.5'>
                         <label htmlFor='isDefault' className='text-sm font-medium cursor-pointer'>
                         Set as Default Account</label>
                         <p className='text-sm text-muted-foreground'>account will be selected as default  </p>
