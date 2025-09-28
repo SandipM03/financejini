@@ -130,7 +130,7 @@ const AddTransactionForm = ({accounts, categories}) => {
             <SelectValue placeholder="select Category" />
           </SelectTrigger>
           <SelectContent>
-            {filteredCategories.map((category) => ()=>(
+            {filteredCategories.map((category) =>(
               <SelectItem key={category.id} value={category.id}>
                 {category.name}
               </SelectItem>

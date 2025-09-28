@@ -2,6 +2,8 @@
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/prisma"
 import { revalidatePath } from "next/cache";
+import aj from "@/lib/arcjet";
+
 
 
 const serializeAmount=(obj)=>({
@@ -13,6 +15,25 @@ export async function createTransaction(data){
     const {userId} = await auth();
             if(!userId) throw new Error("User not found");
     //arcjet to add rate limiting
+    const req= await request();
+        const decision= await aj.protect(req,{
+            userId,
+            requested:1,
+        })
+        if(decision.isDenied()){
+            if(decision.reason.isRateLimit()){
+                const {remaining, reset}= decision.reason;
+                console.error({
+                    code:"RATE_LIMIT_EXCEEDED",
+                    details:{
+                        remaining,
+                        resetInSeconds: reset,
+                    },
+                });
+                throw new Error("too many requests. Please try again later.");
+            }
+            throw new Error("Request denied. Please try again later.");
+        }
             const user = await db.user.findUnique({
                 where: {clerkUserId: userId},
             });
@@ -51,7 +72,8 @@ export async function createTransaction(data){
     revalidatePath(`/account/${transaction.accountId}`);
     return {success : true, data: serializeAmount(transaction)};
  } catch (error) {
-    throw new Error(error.message);
+    console.error("Error creating transaction:", error);
+    return {success: false, error: error.message}
  }
 }
 
