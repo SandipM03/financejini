@@ -2,7 +2,8 @@
 import { auth } from "@clerk/nextjs/server"
 import { db } from "@/lib/prisma"
 import { revalidatePath } from "next/cache";
-
+import aj from "@/lib/arcjet";
+import { request } from "@arcjet/next";
 
 
 //as nextjs doesnot support float, we need to convert balance to float number
@@ -90,6 +91,25 @@ export async function createAccount(data) {
         throw new Error(error.message);
     }
 }
+export async function getDashboardData() {
+  const { userId } = await auth();
+  if (!userId) throw new Error("Unauthorized");
 
+  const user = await db.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Get all user transactions
+  const transactions = await db.transaction.findMany({
+    where: { userId: user.id },
+    orderBy: { date: "desc" },
+  });
+
+  return transactions.map(searializeTransaction);
+}
 
 
