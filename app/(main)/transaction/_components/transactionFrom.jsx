@@ -27,6 +27,7 @@ import { CalendarIcon } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import ReciptScanner from './reciptscanner';
 const AddTransactionForm = ({accounts, categories}) => {
   const router = useRouter();
   const {register, setValue,handleSubmit, formState: {errors},watch,getValues,reset} = useForm({
@@ -68,11 +69,28 @@ const AddTransactionForm = ({accounts, categories}) => {
       }
     }
   },[transactionResult, transactionLoading])
-
+  const handleScanComplete = (scannedData)=>{
+    if (scannedData) {
+      setValue("amount", scannedData.amount.toString());
+      setValue("date", new Date(scannedData.date));
+      if (scannedData.description) {
+        setValue("description", scannedData.description);
+      }
+      if (scannedData.category) {
+        setValue("category", scannedData.category);
+      }
+      toast.success("Receipt scanned successfully");
+    }
+    
+  }
   const filteredCategories= categories.filter((category)=>category.type === type);
+
   return (
     <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
       {/* scanner */}
+      <ReciptScanner
+      onScanComplete={handleScanComplete}
+      />
       <div className='space-y-2'>
         <label className='text-sm font-medium'>Type</label>
         <Select onValueChange={(value)=>setValue('type', value)} 
