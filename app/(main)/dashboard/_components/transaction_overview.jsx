@@ -23,13 +23,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 const COLORS = [
-  "#FF6B6B",
-  "#4ECDC4",
-  "#45B7D1",
-  "#96CEB4",
-  "#FFEEAD",
-  "#D4A5A5",
-  "#9FA8DA",
+  "#00BFFF", // Electric Blue
+  "#FF6F61", // Coral Pink
+  "#A8E6CF", // Lime Green
+  "#008080", // Deep Teal
+  "#FFC300", // Golden Yellow
+  "#B19CD9", // Lavender
+  "#607D8B", // Slate Gray
 ];
 
 export function DashboardOverview({ accounts, transactions }) {

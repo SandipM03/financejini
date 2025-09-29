@@ -2,10 +2,8 @@
 import React,{useState,useEffect, use} from 'react'
 import {
   Card,
-  
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -100,19 +98,22 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
     </CardHeader>
     <CardContent>
         {initialBudget && (<div className='space-y-2'>
-            <Progress 
-             value={percentUsed}
-             extraStyles={`${
-                percentUsed>=90
-                ?'bg-red-500'
-                :percentUsed>=75
-                ?'bg-yellow-500'
-                :'bg-green-500'
-             }`}
-            />
+            <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+                <div 
+                    className={`h-full transition-all duration-300 ${
+                        percentUsed >= 90
+                        ? 'bg-rose-600'
+                        : percentUsed >= 75
+                        ? 'bg-amber-500'
+                        : percentUsed >= 50
+                        ? 'bg-lime-500'       
+                        : 'bg-emerald-500'
+                    }`}
+                    style={{ width: `${Math.min(percentUsed, 100)}%` }}
+                />
+            </div>
             <p className='text-xs text-muted-foreground text-right'>
                 {percentUsed.toFixed(1)}% of budget used
-
             </p>
         </div> )}
     </CardContent>

@@ -1,6 +1,6 @@
 "use server"
 import { Resend } from "resend"
-import { success } from "zod";
+
 
 export async function sendEmail({ to, subject, react }) {
     const resend= new Resend(process.env.RESEND_API_KEY || "");
