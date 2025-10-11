@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -39,7 +38,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import useFetch from '@/hooks/use-fetch';
 import { bulkDeleteTransaction } from '@/action/accounts';
-import { toast } from 'sonner';
+import BasicToast from '@/components/ui/BasicToast';
 import { BarLoader} from 'react-spinners';
 const TransactionTable = ({ transactions }) => {
 
@@ -50,6 +49,16 @@ const TransactionTable = ({ transactions }) => {
   const [typeFilter, setTypeFilter] = useState("");
   const [recurringFilter, setRecurringFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState("success");
+const handleShowToast = (options) => {
+  if (typeof options === 'string') {
+    setToastType(options);
+  } else {
+    setToastType(options.type || "success" | "error" | "info" | "warning");
+  }
+  setShowToast(true);
+}
 const {
   loading:deleteLoading,
   fn:deleteFn,
@@ -66,14 +75,14 @@ const handleBulkDelete=async()=>{
 
 useEffect(()=>{
   if(deleted?.success){
-    toast.success(deleted.message || "Transactions deleted successfully");
+    handleShowToast({ type: "success", message: deleted.message || "Transactions deleted successfully" });
     setSelectedIds([]); // Clear selection after successful delete
   }
 },[deleted])
 
 useEffect(()=>{
   if(deleted?.error){
-    toast.error(deleted.error || "Failed to delete transactions");
+    handleShowToast({ type: "error", message: deleted.error || "Failed to delete transactions" });
   }
 },[deleted])
 const filteredAndSortedTransactions = useMemo(()=>{
@@ -158,6 +167,14 @@ const recurring_interval = {
     <TooltipProvider>
       <div className='space-y-4 '>
         {deleteLoading && (<BarLoader className='mt-4' width={'100%'} color='#933ea'/>)}
+        {showToast && (
+          <BasicToast
+            message={deleted?.message || "Transactions deleted successfully"}
+            type={toastType}
+            duration={5000}
+            onClose={() => setShowToast(false)}
+          />
+        )}
       {/* filter */}
       <div className='flex flex-col sm:flex-row gap-4'>
         <div className='relative flex-1'>
