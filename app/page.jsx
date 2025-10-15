@@ -7,7 +7,28 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mt-20">
+
+      <div className="min-h-screen w-full bg-white relative overflow-hidden">
+ {/* Grid + Glow on All Sides */}
+ <div
+   className="absolute inset-0 z-0 pointer-events-none"
+   style={{
+     backgroundImage: `
+       linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+      linear-gradient(to bottom, #f0f0f0 1px, transparent 1px),
+      radial-gradient(circle 600px at 0% 200px, #d5c5ff, transparent),
+      radial-gradient(circle 600px at 100% 200px, #d5c5ff, transparent)
+     `,
+     backgroundSize: `
+       96px 64px,
+       96px 64px,
+       100% 100%,
+       100% 100%
+     `,
+   }}
+ />
+ {/* Your Content Here */}
+
        <HeroSection/>
        <section className="py-20 bg-blue-50">
         <div className="container mx-auto px-4">

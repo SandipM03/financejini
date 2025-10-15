@@ -4,41 +4,48 @@ import React from 'react'
 import { Button } from './ui/button'
 import { LayoutDashboard, PenBox } from 'lucide-react'
 import { checkUser } from '@/lib/checkUser'
+import { Menu } from "lucide-react"
 const Header =async () => {
   await checkUser();
   return (
-    <div 
-    className='bg-blue-100/80 backdrop-blur-md z-50 border-b'>
-      <nav className='container mx-auto px-4 py-4 flex justify-between items-center'>
-        {/* <Link href="/">
-        {/* logo 
-          <Image src={} alt="lpgp" height={60} width={200}
-           className=" h-12 w-auto object-contain" 
-          /> 
-          
-        </Link> */}
-        <a href='/' className=" relative z-20 flex items-center w-auto object-contain" >
-        <span className='text-2xl font-bold'>
-          <span className="text-gray-900">Finance</span>
-          <span className="text-purple-600">Jini</span>
-        </span>
-          
-        </a>
-        <div className='flex items-center space-x-4'>
+    <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/10">
+    <div className="mx-auto max-w-6xl px-4">
+      <div className="flex h-14 items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="size-5 rounded-sm bg-[#FF4D00]" aria-hidden />
+          <div className=''>
+            <span className="text-gray-900 text-sm font-medium tracking-tight">Finance</span>
+          <span className="text-[#FF4D00] text-sm font-medium tracking-tight">Jini</span>
+          </div> 
+        </Link>
+          <nav className="hidden items-center gap-6 text-sm md:flex">
+            <Link href="#features" className="text-muted-foreground hover:text-[#FF4D00]">
+              Features
+            </Link>
+            <Link href="#how" className="text-muted-foreground hover:text-[#FF4D00]">
+              How it works
+            </Link>
+            <Link href="#insights" className="text-muted-foreground hover:text-[#FF4D00]">
+              Insights
+            </Link>
+          </nav>
+
+        
+        <div className='flex items-center gap-2'>
             <SignedIn>
                 <Link href='/dashboard'
-                    className='text-gray-900 hover:text-blue-100 flex items-center gap-2'>
-                    <Button variant="outline">
+                    className='text-[#FF4D00] hover:text-blue-100 flex items-center gap-2'>
+                    <Button variant="ghost" className="hidden md:inline-flex">
                         <LayoutDashboard size={18} />
-                        <span className='hidden md:inline hover:text-purple-600'>
+                        <span className='hidden md:inline hover:[#FF4D00]'>
                         Dashboard   
                         </span>
                     </Button>
                 </Link>
                 <Link href='/transaction/create'>
-                    <Button  className='flex items-center gap-2'>
+                    <Button  className='flex items-center gap-2 text-amber-50 bg-[#FF4D00]'>
                         <PenBox size={18} />
-                        <span className='hidden md:inline '>
+                        <span className='hidden md:inline  '>
                         Transactions
                         </span>
                     </Button>
@@ -46,7 +53,7 @@ const Header =async () => {
             </SignedIn>
             <SignedOut>
               <SignInButton forceRedirectUrl='/dashboard'>
-                <Button  className='bg-white text-gray-900 hover:bg-[#6c47ff] hover:text-white'>
+                <Button  className='bg-white text-gray-900 hover:bg-[#FF4D00] hover:text-white'>
                     Login
                 </Button>
               </SignInButton>
@@ -54,7 +61,7 @@ const Header =async () => {
                 {/* <button className="bg-[#6c47ff] text-ceramic-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
                   Sign Up
                 </button> */}
-                <Button className=' bg-[#6c47ff] text-white hover:bg-white hover:text-gray-900'>
+                <Button className=' bg-[#FF4D00] text-white hover:bg-white hover:text-gray-900'>
                     Sign Up
                 </Button>
               </SignUpButton>
@@ -67,8 +74,11 @@ const Header =async () => {
             
         </div>
         
-        </nav>
+        
+
+      </div>
     </div>
+    </header>
   )
 }
 

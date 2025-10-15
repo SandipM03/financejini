@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "../components/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
+import { TailwindIndicator } from "@/tw-indicator";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
               <p>© 2024 FinanceJini. All rights reserved.</p>
             </div>
           </footer>
+          <TailwindIndicator/>
         </body>
       </html>
     </ClerkProvider>
