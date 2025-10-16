@@ -1,6 +1,7 @@
 import { featuresData, statsData,howItWorksData,testimonialsData } from "@/data/landing";
 import HeroSection from "../components/Hero";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent,CardHeader,CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,13 +31,13 @@ export default function Home() {
  {/* Your Content Here */}
 
        <HeroSection/>
-       <section className="py-20 bg-blue-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+       <section id="insights"className=" relative mx-auto max-w-6xl px-4 py-16 md:py-24">
+        <div className="rounded-2xl border border-border/60 bg-card p-6 md:p-8">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
             {statsData.map((statsData,index)=>(
-              <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">{statsData.value}</div>
-                <div className="text-gray-600">{statsData.label}</div>
+              <div key={index} className="text-center md:text-left">
+                <div className="text-2xl font-semibold tracking-tight md:text-3xl">{statsData.value}</div>
+                <div className="text-sm text-muted-foreground">{statsData.label}</div>
               </div>
             ))}
             </div>
@@ -44,26 +45,31 @@ export default function Home() {
        </section>
 
 
-       <section id="features" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Everything you need to manage your finances
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+       <section id="features" className="mx-auto max-w-6xl px-4 py-16 md:py-24 relative">
+        <div className="mb-8 flex  justify-center items-center gap-2">
+        <div className="inline-block size-1.5 rounded-full bg-primary" />
+        <p className="text-sm font-medium text-muted-foreground">Key features</p>
+        </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {featuresData.map((feature, index) => (
-              <Card className="p-6" key={index}>
-                <CardContent className="space-y-4 pt-4">
-                  {feature.icon}
-                  <h3 className="text-xl font-semibold">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+              <Card className="border-border/60 bg-card" key={index}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <div className="flex items-center gap-3">
+                <feature.icon className="size-5 text-primary" />
+                <CardTitle className="text-base">{feature.title}</CardTitle>
+              </div>
+              {feature.badge ? <Badge className="bg-primary text-primary-foreground">{feature.badge}</Badge> : null}
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  {feature.desc}
                 </CardContent>
               </Card>
             ))}
           </div>
-        </div>
+        
       </section>
 
-      <section className="py-20 bg-blue-50">
+      <section className="py-20 bg-blue-50 relative">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -80,7 +86,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="testimonials" className="py-20">
+      <section id="testimonials" className="py-20 relative">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">
             Wall of love ❤️
@@ -113,7 +119,7 @@ export default function Home() {
       </section>
 
 
-      <section className="py-20 bg-blue-600">
+      <section className="py-20 bg-blue-600 relative">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Ready to Take Control of Your Finances?

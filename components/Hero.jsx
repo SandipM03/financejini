@@ -34,7 +34,7 @@ const router=useRouter();
     <section className="relative border-b border-border/60">
       {/* subtle spotlight */}
       <div
-        className="pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(60%_60%_at_50%_10%,black,transparent)]"
+        className=" pointer-events-none absolute inset-0 -z-10 [mask-image:radial-gradient(60%_60%_at_50%_10%,black,transparent)]"
         style={{
           background:
             "radial-gradient(60% 60% at 50% 0%, color-mix(in oklab, var(--color-primary) 24%, transparent) 0%, transparent 70%)",
@@ -43,18 +43,17 @@ const router=useRouter();
       />
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 pb-16 pt-12 md:grid-cols-2 md:gap-12 md:pb-24 md:pt-20">
         <div className="flex flex-col gap-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/20 px-3 py-1 text-xs text-muted-foreground">
-            <span className="inline-flex size-2 rounded-full bg-[#FF4D00]" /> AI-powered finance
+           <div className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/20 px-3 py-1 text-xs text-muted-foreground">
+           <span className="inline-flex size-2 rounded-full bg-[#FF4D00]" /> Your AI-powered finance companion
           </div>
 
           <h1 className="text-pretty text-4xl font-semibold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-            Master your money with AI receipt scanning and automated budgets
+            Smarter financial decisions, simplified by AI
           </h1>
-
-          <p className="max-w-prose text-balance text-muted-foreground">
-            FinSight captures receipts instantly, categorizes transactions, and keeps budgets on track—so you can focus
-            on what matters. Real-time dashboards turn your spending into insight.
-          </p>
+            <p className="max-w-prose text-balance text-muted-foreground">
+              FinanceJini helps you track expenses, manage accounts, and receive personalized investment insights — 
+              all in one place. Get AI-driven financial advice and explore smarter ways to grow your wealth, in your preferred Indian language.
+            </p>
 
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button className="bg-[#FF4D00] text-primary-foreground hover:opacity-90 " onClick={handleClick}>

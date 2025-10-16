@@ -1,12 +1,11 @@
 import {
   BarChart3,
   Receipt,
-  PieChart,
   CreditCard,
   Globe,
   Zap,
 } from "lucide-react";
-
+import { Brain, ReceiptText, PieChart, ShieldCheck, Wallet } from "lucide-react"
 // Stats Data
 export const statsData = [
   {
@@ -30,36 +29,30 @@ export const statsData = [
 // Features Data
 export const featuresData = [
   {
-    icon: <BarChart3 className="h-8 w-8 text-blue-600" />,
-    title: "Advanced Analytics",
-    description:
-      "Get detailed insights into your spending patterns with AI-powered analytics",
+    icon: ReceiptText,
+    title: "AI-powered receipt scanning",
+    desc: "Snap a photo or forward an email. We extract totals, taxes, line items, and vendors automatically.",
+    badge: "New",
   },
   {
-    icon: <Receipt className="h-8 w-8 text-blue-600" />,
-    title: "Smart Receipt Scanner",
-    description:
-      "Extract data automatically from receipts using advanced AI technology",
+    icon: PieChart,
+    title: "Automated budget tracking",
+    desc: "Budgets update in real-time with categorized transactions and smart alerts to prevent overspending.",
   },
   {
-    icon: <PieChart className="h-8 w-8 text-blue-600" />,
-    title: "Budget Planning",
-    description: "Create and manage budgets with intelligent recommendations",
+    icon: Brain,
+    title: "Comprehensive insights",
+    desc: "Understand trends, cashflow, and savings opportunities with clean dashboards and weekly summaries.",
   },
   {
-    icon: <CreditCard className="h-8 w-8 text-blue-600" />,
-    title: "Multi-Account Support",
-    description: "Manage multiple accounts and credit cards in one place",
+    icon: Wallet,
+    title: "Bank sync",
+    desc: "Securely connect multiple accounts to unify spending across cards and banks with auto-categorization.",
   },
   {
-    icon: <Globe className="h-8 w-8 text-blue-600" />,
-    title: "Multi-Currency",
-    description: "Support for multiple currencies with real-time conversion",
-  },
-  {
-    icon: <Zap className="h-8 w-8 text-blue-600" />,
-    title: "Automated Insights",
-    description: "Get automated financial insights and recommendations",
+    icon: ShieldCheck,
+    title: "Privacy first",
+    desc: "Data encrypted in transit and at rest. You control imports, exports, and device access.",
   },
 ];
 
