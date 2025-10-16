@@ -47,7 +47,7 @@ export default function Home() {
 
        <section id="features" className="mx-auto max-w-6xl px-4 py-16 md:py-24 relative">
         <div className="mb-8 flex  justify-center items-center gap-2">
-        <div className="inline-block size-1.5 rounded-full bg-primary" />
+        <div className="inline-block size-1.5 rounded-full bg-[#FF4D00]" />
         <p className="text-sm font-medium text-muted-foreground">Key features</p>
         </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -55,10 +55,10 @@ export default function Home() {
               <Card className="border-border/60 bg-card" key={index}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <div className="flex items-center gap-3">
-                <feature.icon className="size-5 text-primary" />
+                <feature.icon className="size-5 text-[#FF4D00]" />
                 <CardTitle className="text-base">{feature.title}</CardTitle>
               </div>
-              {feature.badge ? <Badge className="bg-primary text-primary-foreground">{feature.badge}</Badge> : null}
+              {feature.badge ? <Badge className="bg-[#FF4D00] text-primary-foreground">{feature.badge}</Badge> : null}
                 </CardHeader>
                 <CardContent className="text-sm text-muted-foreground">
                   {feature.desc}
@@ -72,13 +72,13 @@ export default function Home() {
       <section id="howitworks" className=" relative border-y border-border/60 bg-muted/5">
         <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
           <div className="mb-8 flex justify-center items-center gap-2">
-           <div className="inline-block size-1.5 rounded-full bg-primary" />
+           <div className="inline-block size-1.5 rounded-full bg-[#FF4D00]" />
             <p className="text-sm font-medium text-muted-foreground">How it works</p>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {howItWorksData.map((step) => (
               <div key={step.k} className="rounded-xl border border-border/60 bg-card p-6">
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-[#FF4D00]">
                   {step.k}
                 </div>
                 
@@ -135,23 +135,31 @@ export default function Home() {
       </section> */}
 
 
-      <section className="py-20 bg-blue-600 relative">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Take Control of Your Finances?
-          </h2>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of users who are already managing their finances
-            smarter with FinanceJini
-          </p>
-          <Link href="/dashboard">
-            <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-blue-50 animate-bounce"
-            >
-              Start Free Trial
-            </Button>
-          </Link>
+      <section className="border-t border-border/60 relative">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+          <div>
+            <h2 className="text-pretty text-2xl font-semibold tracking-tight md:text-3xl">
+              Ready to see where your money goes?
+            </h2>
+            <p className="mt-2 max-w-prose text-sm text-muted-foreground">
+              Start with AI receipt capture and automated budgets in minutes—no spreadsheets needed.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Link href="/sign-in">
+              <Button
+                size="lg"
+                className="bg-[#FF4D00] text-primary-foreground hover:bg-[#f8743c] hover:text-white"
+              >
+                Create free account
+              </Button>
+              <Button variant="secondary" asChild>
+                <Link href="#features">Explore features</Link>
+              </Button>
+            </Link>
+          </div>
+        </div>
         </div>
       </section>
     </div>
