@@ -58,23 +58,20 @@ export const featuresData = [
 
 // How It Works Data
 export const howItWorksData = [
-  {
-    icon: <CreditCard className="h-8 w-8 text-blue-600" />,
-    title: "1. Create Your Account",
-    description:
-      "Get started in minutes with our simple and secure sign-up process",
+{
+    k: "01",
+    t: "Capture receipts",
+    d: "Upload photos, email receipts, or connect your inbox. We ingest everything automatically.",
   },
   {
-    icon: <BarChart3 className="h-8 w-8 text-blue-600" />,
-    title: "2. Track Your Spending",
-    description:
-      "Automatically categorize and track your transactions in real-time",
+    k: "02",
+    t: "Analyze with AI",
+    d: "We parse totals, merchants, categories, and taxes—then reconcile with your bank data.",
   },
   {
-    icon: <PieChart className="h-8 w-8 text-blue-600" />,
-    title: "3. Get Insights",
-    description:
-      "Receive AI-powered insights and recommendations to optimize your finances",
+    k: "03",
+    t: "Track & optimize",
+    d: "Budgets update in real time and insights highlight trends, waste, and savings opportunities.",
   },
 ];
 
@@ -102,3 +99,10 @@ export const testimonialsData = [
       "I recommend FinanceJini to all my clients. The multi-currency support and detailed analytics make it perfect for international investors.",
   },
 ];
+
+export const items = [
+    { k: "98.6%", d: "Receipt parsing accuracy" },
+    { k: "12 hrs", d: "Average time saved / month" },
+    { k: "$3.2k", d: "Avg. yearly savings found" },
+    { k: "256k+", d: "Receipts processed" },
+  ]

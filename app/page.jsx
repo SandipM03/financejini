@@ -1,4 +1,4 @@
-import { featuresData, statsData,howItWorksData,testimonialsData } from "@/data/landing";
+import { featuresData, statsData,howItWorksData,items ,testimonialsData} from "@/data/landing";
 import HeroSection from "../components/Hero";
 import { Card, CardContent,CardHeader,CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -69,17 +69,21 @@ export default function Home() {
         
       </section>
 
-      <section className="py-20 bg-blue-50 relative">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {howItWorksData.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  {step.icon}
+      <section id="howitworks" className=" relative border-y border-border/60 bg-muted/5">
+        <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
+          <div className="mb-8 flex justify-center items-center gap-2">
+           <div className="inline-block size-1.5 rounded-full bg-primary" />
+            <p className="text-sm font-medium text-muted-foreground">How it works</p>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {howItWorksData.map((step) => (
+              <div key={step.k} className="rounded-xl border border-border/60 bg-card p-6">
+                <div className="text-xs text-muted-foreground">
+                  {step.k}
                 </div>
-                <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
+                
+                <h3 className="mt-2 text-lg font-semibold tracking-tight">{step.t}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{step.d}</p>
               </div>
             ))}
           </div>
@@ -117,6 +121,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* <section id="insights" className=" relative mx-auto max-w-6xl px-4 py-16 md:py-24">
+      <div className="rounded-2xl border border-border/60 bg-card p-6 md:p-8">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          {items.map((m) => (
+            <div key={m.d} className="text-center md:text-left">
+              <div className="text-2xl font-semibold tracking-tight md:text-3xl">{m.k}</div>
+              <div className="text-sm text-muted-foreground">{m.d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      </section> */}
 
 
       <section className="py-20 bg-blue-600 relative">
