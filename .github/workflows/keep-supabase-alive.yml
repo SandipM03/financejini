@@ -16,9 +16,14 @@ jobs:
       SUPABASE_URL: "${{ secrets.SUPABASE_URL }}"
       SUPABASE_ANON_KEY: "${{ secrets.SUPABASE_ANON_KEY }}"
     steps:
-      - name: Show which URL will be pinged
+      - name: Show which source will be used for Supabase URL
         run: |
-          echo "Using SUPABASE_URL=$SUPABASE_URL"
+          # Do not print secrets to logs. Just indicate which source will be used.
+          if [ -n "${SUPABASE_URL:-}" ]; then
+            echo "Using SUPABASE_URL from repository secrets"
+          else
+            echo "Using fallback SUPABASE_URL"
+          fi
 
       - name: Ping Supabase REST endpoint with retries
         run: |
@@ -31,12 +36,19 @@ jobs:
           # If you provide an anon key as a secret (recommended), the request will include it.
           API_KEY="$SUPABASE_ANON_KEY"
 
+          # Record whether we're using the secret or the fallback. Do NOT print the URL or key.
+          if [ -n "${SUPABASE_URL:-}" ]; then
+            USED_SOURCE="secrets"
+          else
+            USED_SOURCE="fallback"
+          fi
+
           ATTEMPTS=5
           SLEEP=5
           LAST_STATUS=000
 
           for i in $(seq 1 $ATTEMPTS); do
-            echo "Attempt $i: GET $REST_URL"
+            echo "Attempt $i: GET Supabase REST endpoint (using $USED_SOURCE)"
             if [ -n "$API_KEY" ]; then
               # Send both apiKey and Authorization headers (Supabase accepts either)
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "apikey: $API_KEY" -H "Authorization: Bearer $API_KEY" "$REST_URL" || echo "000")
