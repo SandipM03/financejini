@@ -1,14 +1,68 @@
 name: Keep Supabase Alive
 
 on:
+
   schedule:
-     - cron: '0 0 */2 * *'  # every 3 days at midnight
-  workflow_dispatch: # allows manual run from GitHub Actions tab
+    - cron: '0 */6 * * *'
+  
+  workflow_dispatch:
 
 jobs:
   ping:
+    name: Ping Supabase
     runs-on: ubuntu-latest
+    env:
+      
+      SUPABASE_URL: "${{ secrets.SUPABASE_URL }}"
+      SUPABASE_ANON_KEY: "${{ secrets.SUPABASE_ANON_KEY }}"
     steps:
-      - name: Ping Supabase REST API
+      - name: Show which URL will be pinged
         run: |
-          curl -s -o /dev/null -w "%{http_code}" https://hsupmflvueacqfmmallb.supabase.co/rest/v1/ | grep 200 || echo "Ping failed"
+          echo "Using SUPABASE_URL=$SUPABASE_URL"
+
+      - name: Ping Supabase REST endpoint with retries
+        run: |
+          set -euxo pipefail
+
+          # Normalize URL (remove trailing slash) and build REST path
+          BASE_URL="${SUPABASE_URL%/}"
+          REST_URL="$BASE_URL/rest/v1/"
+
+          # If you provide an anon key as a secret (recommended), the request will include it.
+          API_KEY="$SUPABASE_ANON_KEY"
+
+          ATTEMPTS=5
+          SLEEP=5
+          LAST_STATUS=000
+
+          for i in $(seq 1 $ATTEMPTS); do
+            echo "Attempt $i: GET $REST_URL"
+            if [ -n "$API_KEY" ]; then
+              # Send both apiKey and Authorization headers (Supabase accepts either)
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" -H "apikey: $API_KEY" -H "Authorization: Bearer $API_KEY" "$REST_URL" || echo "000")
+            else
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$REST_URL" || echo "000")
+            fi
+
+            echo "HTTP status: $STATUS"
+            LAST_STATUS=$STATUS
+
+            # Common successful responses: 200 OK, 204 No Content, and redirects
+            if [ "$STATUS" = "200" ] || [ "$STATUS" = "204" ] || [ "$STATUS" = "301" ] || [ "$STATUS" = "302" ]; then
+              echo "Supabase responded successfully (status=$STATUS)."
+              exit 0
+            fi
+
+            echo "Request failed (status=$STATUS). Sleeping ${SLEEP}s before retry..."
+            sleep $SLEEP
+            SLEEP=$((SLEEP * 2))
+          done
+
+          echo "All $ATTEMPTS attempts failed. Last HTTP status: $LAST_STATUS"
+          # Fail the job so you can see the failure in Actions and investigate
+          exit 1
+
+      - name: Finished
+        if: ${{ always() }}
+        run: |
+          echo "Ping job finished for $SUPABASE_URL"
