@@ -96,7 +96,7 @@ const router=useRouter();
               <div className="grid grid-cols-3 gap-3">
                 <div className="rounded-lg border border-border/60 bg-card p-3">
                   <Image
-                    src={"/placeholder.svg?height=160&width=240&query=receipt%20photo%20preview"}
+                    src={"/placeholder.jpg"}
                     alt="Receipt preview"
                     width={240}
                     height={160}
@@ -106,7 +106,7 @@ const router=useRouter();
                 </div>
                 <div className="rounded-lg border border-border/60 bg-card p-3">
                   <Image
-                    src={"/placeholder.svg?height=160&width=240&query=groceries%20receipt%20preview"}
+                    src={"/placeholder.jpg"}
                     alt="Receipt preview"
                     width={240}
                     height={160}
@@ -116,7 +116,7 @@ const router=useRouter();
                 </div>
                 <div className="rounded-lg border border-border/60 bg-card p-3">
                   <Image
-                    src={"/placeholder.svg?height=160&width=240&query=dashboard%20spending%20graph%20green"}
+                    src={"/placeholder.jpg"}
                     alt="Spending graph preview"
                     width={240}
                     height={160}

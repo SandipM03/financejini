@@ -26,8 +26,21 @@ import { createAccount } from '@/action/dashboard'
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
+import BasicToast from './ui/BasicToast'
 const CreateAccountDrawer = ({children}) => {
     const [open, setOpen] = useState(false)
+    const [showToast, setShowToast] = useState(false);
+    const [toastType, setToastType] = useState("success");
+    const [toastMessage, setToastMessage] = useState("");
+    const handleShowToast = (options) => {
+        if (typeof options === 'string') {
+          setToastType(options);
+        } else {
+          setToastType(options.type || "success");
+          setToastMessage(options.message || "");
+        }
+        setShowToast(true);
+    }
     const {
         register,
         handleSubmit, 
@@ -51,7 +64,7 @@ const CreateAccountDrawer = ({children}) => {
         } = useFetch(createAccount);
     useEffect(() => {
       if(newAccount && !createAccountLoading){
-        toast.success('Account created successfully')
+        handleShowToast({type: 'success', message: 'Account created successfully'});
         reset();
         setOpen(false);
       }
@@ -59,7 +72,7 @@ const CreateAccountDrawer = ({children}) => {
     },[createAccountLoading,newAccount])
     useEffect(() => {
         if(error){
-           toast.error(error.message || 'failed to create account') 
+           handleShowToast({type: 'error', message: error.message || 'failed to create account'}) 
         }
     },[error])
     const onSubmit =async (data) => {
@@ -158,8 +171,16 @@ const CreateAccountDrawer = ({children}) => {
                     </div>
 
                 </form>
+                {showToast && (
+                        <BasicToast 
+                        message={toastMessage}
+                        type={toastType}
+                        duration={3000}
+                        onClose={() => setShowToast(false)}
+                        />
+                        )}
             </div>
-            
+
         </DrawerContent>
     </Drawer>
   )
