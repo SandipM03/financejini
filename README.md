@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FinanceJini 💰
 
-## Getting Started
+A modern personal finance management application with AI-powered receipt scanning, automated budget tracking, and comprehensive financial insights.
 
-First, run the development server:
+## 🚀 Tech Stack
+
+### Frontend
+- **Next.js 15.5.3** - React framework with App Router and Turbopack
+- **React 19.1.0** - UI library with latest features
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Modern component library with Radix UI primitives
+- **Lucide React** - Beautiful icon library
+- **Recharts** - Chart library for financial data visualization
+- **React Hook Form + Zod** - Form handling with TypeScript-first schema validation
+
+### Backend & Database
+- **Prisma ORM** - Type-safe database client
+- **PostgreSQL** - Robust relational database (via Supabase)
+- **Supabase** - Database hosting with connection pooling
+
+### Authentication & Security
+- **Clerk** - Complete authentication solution
+- **Middleware** - Route protection and user session management
+
+### AI & Integrations
+- **Google Generative AI (Gemini)** - AI-powered receipt scanning and expense categorization
+- **Resend** - Transactional email service
+- **React Email** - Email template components
+
+### Background Jobs & Notifications
+- **Inngest** - Serverless background job processing
+- **Sonner** - Toast notifications
+
+### UI/UX Components
+- **Radix UI** - Headless UI primitives (Dialog, Dropdown, Select, etc.)
+- **React Day Picker** - Calendar and date selection
+- **Vaul** - Mobile-optimized drawer component
+- **React Spinners** - Loading states and animations
+- **Next Themes** - Dark/light mode support
+
+### Development Tools
+- **ESLint** - Code linting and formatting
+- **PostCSS** - CSS processing
+- **Class Variance Authority** - Conditional CSS class utilities
+
+## 🛠️ Key Features
+
+- **Smart Expense Tracking** - AI-powered receipt scanning with automatic categorization
+- **Multi-Account Management** - Track multiple bank accounts and credit cards
+- **Budget Monitoring** - Automated monthly budget alerts and insights
+- **Bulk Operations** - Efficient transaction management with bulk delete
+- **Real-time Dashboard** - Financial overview with interactive charts
+- **Email Notifications** - Monthly reports and budget alerts
+- **Secure Authentication** - Protected routes with Clerk integration
+
+## 🚀 Getting Started
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📧 Email Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Start email development server
+npm run email
+```
