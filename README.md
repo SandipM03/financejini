@@ -1,4 +1,3 @@
-
 # 💰 FinanceJini – Your AI-Powered Financial Assistant
 
 FinanceJini is a next-gen financial assistant web application that empowers users to **track expenses**, **manage accounts**, **receive personalized investment advice**, and **explore financial products** — all with **AI-powered insights** and **support for Indian languages**.
