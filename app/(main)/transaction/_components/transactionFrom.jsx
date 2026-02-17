@@ -218,8 +218,8 @@ const AddTransactionForm = ({accounts, categories,editMode=false, initialData=nu
       {/* isRecurring */}
       <div className='flex items-center justify-between rounded-lg border p-2 mt-4'>
           <div className='space-y-0.5'>
-            <label htmlFor='isDefault' className='text-sm font-medium cursor-pointer'>
-               Set as Default Transaction</label>
+            <label htmlFor='isRecurring' className='text-sm font-medium cursor-pointer'>
+               Set as recurring Transaction</label>
             <p className='text-sm text-muted-foreground'>
               set up a recurring transaction</p>
           </div>

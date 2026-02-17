@@ -31,7 +31,7 @@ export const featuresData = [
   {
     icon: ReceiptText,
     title: "AI-powered receipt scanning",
-    desc: "Snap a photo or forward an email. We extract totals, taxes, line items, and vendors automatically.",
+    desc: "Snap a photo or add a photo. We extract totals, dates,items automatically.",
     badge: "New",
   },
   {
@@ -46,8 +46,8 @@ export const featuresData = [
   },
   {
     icon: Wallet,
-    title: "Bank sync",
-    desc: "Securely connect multiple accounts to unify spending across cards and banks with auto-categorization.",
+    title: "sync",
+    desc: "Add multiple accounts to unify spending across cards and banks with auto-categorization.",
   },
   {
     icon: ShieldCheck,

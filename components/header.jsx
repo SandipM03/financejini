@@ -22,11 +22,11 @@ const Header =async () => {
             <Link href="#features" className="text-muted-foreground hover:text-[#FF4D00]">
               Features
             </Link>
-            <Link href="#how" className="text-muted-foreground hover:text-[#FF4D00]">
+            <Link href="#howitworks" className="text-muted-foreground hover:text-[#FF4D00]">
               How it works
             </Link>
-            <Link href="#insights" className="text-muted-foreground hover:text-[#FF4D00]">
-              Insights
+            <Link href="#testimonials" className="text-muted-foreground hover:text-[#FF4D00]">
+              Testimonials
             </Link>
           </nav>
 

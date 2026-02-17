@@ -82,7 +82,7 @@ const router=useRouter();
         </div>
 
         {/* right preview card */}
-        <div className="relative">
+        {/* <div className="relative">
           <div className="rounded-xl border border-border/60 bg-card p-3 shadow-[0_0_0_1px_hsl(var(--border))] md:p-4">
             <div className="rounded-lg border border-border/60 bg-muted/10 p-4">
               <div className="mb-3 flex items-center justify-between">
@@ -102,7 +102,7 @@ const router=useRouter();
                     height={160}
                     className="h-24 w-full rounded object-cover"
                   />
-                  <p className="mt-2 text-xs text-muted-foreground">Auto-captured: Coffee Shop</p>
+                  <p className="mt-2 text-xs text-muted-foreground">Recipt Scanner</p>
                 </div>
                 <div className="rounded-lg border border-border/60 bg-card p-3">
                   <Image
@@ -112,7 +112,7 @@ const router=useRouter();
                     height={160}
                     className="h-24 w-full rounded object-cover"
                   />
-                  <p className="mt-2 text-xs text-muted-foreground">Parsed totals + tax</p>
+                  <p className="mt-2 text-xs text-muted-foreground">Interactive Dashboard</p>
                 </div>
                 <div className="rounded-lg border border-border/60 bg-card p-3">
                   <Image
@@ -122,7 +122,7 @@ const router=useRouter();
                     height={160}
                     className="h-24 w-full rounded object-cover"
                   />
-                  <p className="mt-2 text-xs text-muted-foreground">Tagged & categorized</p>
+                  <p className="mt-2 text-xs text-muted-foreground">Spending Insights</p>
                 </div>
               </div>
             </div>
@@ -133,11 +133,11 @@ const router=useRouter();
               </div>
               <div className="rounded-lg border border-border/60 bg-card p-3">
                 <div className="text-muted-foreground">Cash flow</div>
-                <div className="mt-1 text-2xl font-semibold tracking-tight">+$428 this week</div>
+                <div className="mt-1 text-2xl font-semibold tracking-tight">+428 this week</div>
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
