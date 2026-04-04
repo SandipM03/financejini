@@ -12,24 +12,38 @@ import { Button } from '@/components/ui/button';
 import { Check, Pencil,X } from 'lucide-react';
 import useFetch from '@/hooks/use-fetch';
 import { updateBudget } from '@/action/budget';
-import { toast } from 'sonner';
-import { Progress } from '@/components/ui/progress';
+import BasicToast from '@/components/ui/BasicToast';
+
 const BudgetProgress = ({ initialBudget, currentExpenses }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newBudget, setNewBudget] = useState(initialBudget?.ammount?.toString() || '');
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState("success");
+  const [toastMessage, setToastMessage] = useState("");
+  
+  const handleShowToast = (options) => {
+    if (typeof options === 'string') {
+      setToastType(options);
+      setToastMessage("");
+    } else {
+      setToastType(options.type || "success");
+      setToastMessage(options.message || "");
+    }
+    setShowToast(true);
+  }
   const percentUsed= initialBudget
   ?(currentExpenses/initialBudget.amount)*100
   :0;
   const{
-    loding:isLoading,
+    loading:isLoading,
     fn:updateBudgetFn,
-    date:updatedBudget,
+    data:updatedBudget,
     error,
   }=useFetch(updateBudget)
  const handleUpdateBudget=async()=>{
     const amount=parseFloat(newBudget);
     if(isNaN(amount) || amount<=0){
-        toast.error('Please enter a valid budget amount');
+        handleShowToast({type: 'error', message: 'Please enter a valid budget amount'});
         return;
     }
     await updateBudgetFn(amount);
@@ -37,12 +51,12 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
  useEffect(()=>{
     if(updatedBudget?.success){
         setIsEditing(false);
-        toast.success('Budget updated successfully');
+        handleShowToast({type: 'success', message: 'Budget updated successfully'});
     }
  },[updatedBudget]);
  useEffect(()=>{
     if(error){
-        toast.error(error.message || 'Failed to update budget. Please try again.');
+        handleShowToast({type: 'error', message: error.message || 'Failed to update budget. Please try again.'});
     }
  },[error]);
  const handleCancel=()=>{
@@ -117,7 +131,14 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
             </p>
         </div> )}
     </CardContent>
-    
+    {showToast && (
+        <BasicToast
+            message={toastMessage}
+            type={toastType}
+            duration={3000}
+            onClose={() => setShowToast(false)}
+        />
+    )}
     </Card>
 
   )

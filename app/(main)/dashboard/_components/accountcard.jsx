@@ -7,15 +7,31 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useState } from 'react'
 import { Switch } from '@/components/ui/switch'
 import { ArrowUpRight,ArrowDownRight } from 'lucide-react'
 import Link from 'next/link'
 import useFetch from '@/hooks/use-fetch'
 import { updateDefaultAccount } from '@/action/accounts'
-import { toast } from 'sonner'
+import BasicToast from '@/components/ui/BasicToast'
 import { useEffect } from 'react'
+import { warning } from 'motion'
 
 function AccountCard({ account }) {
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState("success");
+  const [toastMessage, setToastMessage] = useState("");
+
+const handleShowToast = (options) => {
+  if (typeof options === 'string') {
+    setToastType(options);
+    setToastMessage("");
+  } else {
+    setToastType(options.type || "success");
+    setToastMessage(options.message || "");
+  }
+  setShowToast(true);
+}
   const { name, type, balance, id, isDefault } = account;
 
   const {
@@ -29,7 +45,7 @@ function AccountCard({ account }) {
     event.preventDefault(); // Prevent navigation
 
     if (isDefault) {
-      toast.warning("You need atleast 1 default account");
+      handleShowToast({ type: "warning", message: "You need at least 1 default account" });
       return; // Don't allow toggling off the default account
     }
 
@@ -38,13 +54,13 @@ function AccountCard({ account }) {
 
   useEffect(() => {
     if (updatedAccount?.success) {
-      toast.success("Default account updated successfully");
+      handleShowToast({ type: "success", message: "Default account updated successfully" });
     }
   }, [updatedAccount, updateDefaultLoading]);
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message || "Failed to update default account");
+      handleShowToast({ type: "error", message: error.message || "Failed to update default account" });
     }
   }, [error]);
 
@@ -80,6 +96,14 @@ function AccountCard({ account }) {
           </div>
         </CardFooter>
       </Link>
+      {showToast && (
+        <BasicToast
+          message={toastMessage}
+          type={toastType}
+          duration={3000}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </Card>
   );
 }

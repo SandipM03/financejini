@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import aj from "@/lib/arcjet";
 import { request } from "@arcjet/next";
+import { inngest } from "@/lib/inngest/client";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -92,6 +93,26 @@ export async function createTransaction(data) {
 
     revalidatePath("/dashboard");
     revalidatePath(`/account/${transaction.accountId}`);
+
+    // Send an event so Inngest can react immediately in development (and production)
+    try {
+      const eventPayload = {
+        transactionId: transaction.id,
+        userId: user.id,
+        accountId: transaction.accountId,
+        amount: transaction.amount?.toNumber ? transaction.amount.toNumber() : transaction.amount,
+        type: transaction.type,
+      };
+      console.log("Sending inngest event transaction.created with payload:", eventPayload);
+      const sendResult = await inngest.send({
+        name: "transaction.created",
+        data: eventPayload,
+      });
+      console.log("inngest.send result:", sendResult);
+    } catch (e) {
+      // Non-fatal: log and continue
+      console.error("Failed to send inngest event for transaction.created:", e);
+    }
 
     return { success: true, data: serializeAmount(transaction) };
   } catch (error) {

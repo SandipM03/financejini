@@ -1,21 +1,43 @@
-import { featuresData, statsData,howItWorksData,testimonialsData } from "@/data/landing";
+import { featuresData, statsData,howItWorksData,items ,testimonialsData} from "@/data/landing";
 import HeroSection from "../components/Hero";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent,CardHeader,CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mt-20">
+
+      <div className="min-h-screen w-full bg-white relative overflow-hidden">
+ {/* Grid + Glow on All Sides */}
+ <div
+   className="absolute inset-0 z-0 pointer-events-none"
+   style={{
+     backgroundImage: `
+       linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+      linear-gradient(to bottom, #f0f0f0 1px, transparent 1px),
+      radial-gradient(circle 600px at 0% 200px, #d5c5ff, transparent),
+      radial-gradient(circle 600px at 100% 200px, #d5c5ff, transparent)
+     `,
+     backgroundSize: `
+       96px 64px,
+       96px 64px,
+       100% 100%,
+       100% 100%
+     `,
+   }}
+ />
+ {/* Your Content Here */}
+
        <HeroSection/>
-       <section className="py-20 bg-blue-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+       <section id="insights"className=" relative mx-auto max-w-6xl px-4 py-16 md:py-24">
+        <div className="rounded-2xl border border-border/60 bg-card p-6 md:p-8">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
             {statsData.map((statsData,index)=>(
-              <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">{statsData.value}</div>
-                <div className="text-gray-600">{statsData.label}</div>
+              <div key={index} className="text-center md:text-left">
+                <div className="text-2xl font-semibold tracking-tight md:text-3xl">{statsData.value}</div>
+                <div className="text-sm text-muted-foreground">{statsData.label}</div>
               </div>
             ))}
             </div>
@@ -23,43 +45,52 @@ export default function Home() {
        </section>
 
 
-       <section id="features" className="py-20">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Everything you need to manage your finances
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+       <section id="features" className="mx-auto max-w-6xl px-4 py-16 md:py-24 relative">
+        <div className="mb-8 flex  justify-center items-center gap-2">
+        <div className="inline-block size-1.5 rounded-full bg-[#FF4D00]" />
+        <p className="text-sm font-medium text-muted-foreground">Key features</p>
+        </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {featuresData.map((feature, index) => (
-              <Card className="p-6" key={index}>
-                <CardContent className="space-y-4 pt-4">
-                  {feature.icon}
-                  <h3 className="text-xl font-semibold">{feature.title}</h3>
-                  <p className="text-gray-600">{feature.description}</p>
+              <Card className="border-border/60 bg-card" key={index}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <div className="flex items-center gap-3">
+                <feature.icon className="size-5 text-[#FF4D00]" />
+                <CardTitle className="text-base">{feature.title}</CardTitle>
+              </div>
+              {feature.badge ? <Badge className="bg-[#FF4D00] text-primary-foreground">{feature.badge}</Badge> : null}
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  {feature.desc}
                 </CardContent>
               </Card>
             ))}
           </div>
-        </div>
+        
       </section>
 
-      <section className="py-20 bg-blue-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {howItWorksData.map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  {step.icon}
+      <section id="howitworks" className=" relative border-y border-border/60 bg-muted/5">
+        <div className="mx-auto max-w-6xl px-4 py-16 md:py-24">
+          <div className="mb-8 flex justify-center items-center gap-2">
+           <div className="inline-block size-1.5 rounded-full bg-[#FF4D00]" />
+            <p className="text-sm font-medium text-muted-foreground">How it works</p>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {howItWorksData.map((step) => (
+              <div key={step.k} className="rounded-xl border border-border/60 bg-card p-6">
+                <div className="text-xs text-[#FF4D00]">
+                  {step.k}
                 </div>
-                <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
+                
+                <h3 className="mt-2 text-lg font-semibold tracking-tight">{step.t}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{step.d}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="testimonials" className="py-20">
+      <section id="testimonials" className="py-20 relative">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-16">
             Wall of love ❤️
@@ -90,25 +121,45 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* <section id="insights" className=" relative mx-auto max-w-6xl px-4 py-16 md:py-24">
+      <div className="rounded-2xl border border-border/60 bg-card p-6 md:p-8">
+        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          {items.map((m) => (
+            <div key={m.d} className="text-center md:text-left">
+              <div className="text-2xl font-semibold tracking-tight md:text-3xl">{m.k}</div>
+              <div className="text-sm text-muted-foreground">{m.d}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      </section> */}
 
 
-      <section className="py-20 bg-blue-600">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Take Control of Your Finances?
-          </h2>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of users who are already managing their finances
-            smarter with FinanceJini
-          </p>
-          <Link href="/dashboard">
-            <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-blue-50 animate-bounce"
-            >
-              Start Free Trial
-            </Button>
-          </Link>
+      <section className="border-t border-border/60 relative">
+        <div className="mx-auto max-w-6xl px-4 py-14">
+        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+          <div>
+            <h2 className="text-pretty text-2xl font-semibold tracking-tight md:text-3xl">
+              Ready to see where your money goes?
+            </h2>
+            <p className="mt-2 max-w-prose text-sm text-muted-foreground">
+              Start with AI receipt capture and automated budgets in minutes—no spreadsheets needed.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Link href="/sign-in">
+              <Button
+                size="lg"
+                className="bg-[#FF4D00] text-primary-foreground hover:bg-[#f8743c] hover:text-white"
+              >
+                Create free account
+              </Button>
+              <Button variant="secondary" asChild>
+                <Link href="#features">Explore features</Link>
+              </Button>
+            </Link>
+          </div>
+        </div>
         </div>
       </section>
     </div>

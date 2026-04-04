@@ -1,0 +1,52 @@
+name: Check Supabase connectivity
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: "Diagnostic: Test Supabase connectivity"
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          # Extract host from SUPABASE_URL (strip protocol and path)
+          host=$(echo "${SUPABASE_URL:-}" | sed -E 's#https?://##; s#/.*##')
+          echo "HOST to test: $host"   # Safe: hostname only
+
+          # DNS resolution using Python (no extra packages needed)
+          python3 - "$host" <<'PY'
+          import socket, sys
+          host = sys.argv[1]
+          try:
+              addrs = socket.getaddrinfo(host, None)
+              print("✅ DNS resolved addresses count:", len(addrs))
+          except Exception as e:
+              print("❌ DNS resolution failed:", e)
+              sys.exit(1)
+          PY
+
+          # Basic TCP/TLS connectivity test
+          echo "🔌 Testing TCP/TLS connectivity to https://${host}/"
+          curl -I --max-time 10 "https://${host}/" || echo "❌ curl to host root failed"
+
+          # Supabase anon key metadata (safe diagnostics only)
+          if [ -n "${SUPABASE_ANON_KEY:-}" ]; then
+            key_len=$(printf '%s' "$SUPABASE_ANON_KEY" | wc -c)
+            echo "🔐 SUPABASE_ANON_KEY length: $key_len"
+
+            if printf '%s' "$SUPABASE_ANON_KEY" | grep -q $'\n'; then
+              echo "⚠️ SUPABASE_ANON_KEY contains newline(s)"
+            else
+              echo "✅ SUPABASE_ANON_KEY is single-line"
+            fi
+          else
+            echo "❌ SUPABASE_ANON_KEY is empty"
+          fi
