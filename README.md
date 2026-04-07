@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-# FinanceJini 💰
-=======
+
 <div align="center">
 
 # FinanceJini
@@ -132,12 +130,10 @@ Client (React 19)
                     └── Resend ──► Email delivery
 ```
 
----
->>>>>>> 1d88da737e8b77277431603ff4477f90aa13d85a
 
 A modern personal finance management application with AI-powered receipt scanning, automated budget tracking, and comprehensive financial insights.
 
-<<<<<<< HEAD
+
 ## 🚀 Tech Stack
 
 ### Frontend
@@ -190,7 +186,6 @@ A modern personal finance management application with AI-powered receipt scannin
 - **Secure Authentication** - Protected routes with Clerk integration
 
 ## 🚀 Getting Started
-=======
 ### Prerequisites
 
 - **Node.js** 18+ and **npm**
@@ -222,7 +217,7 @@ npx prisma db push
 ```
 
 ### 5. Start the Development Server
->>>>>>> 1d88da737e8b77277431603ff4477f90aa13d85a
+
 
 ```bash
 # Install dependencies
@@ -238,7 +233,6 @@ npx prisma migrate dev
 npm run dev
 ```
 
-<<<<<<< HEAD
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
 ## 📧 Email Development
@@ -247,7 +241,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 # Start email development server
 npm run email
 ```
-=======
 The app will be available at [http://localhost:3000](http://localhost:3000).
 
 ### 6. Start the Inngest Dev Server
@@ -400,4 +393,4 @@ Built by **Sandip Mandal**
 Based in India | Open to remote & global collaboration
 
 ---
->>>>>>> 1d88da737e8b77277431603ff4477f90aa13d85a
+
