@@ -155,7 +155,7 @@ export default function Home() {
                 Create free account
               </Button>
               <Button variant="secondary" asChild>
-                <Link href="#features">Explore features</Link>
+                <a href="#features">Explore features</a>
               </Button>
             </Link>
           </div>
